@@ -84,9 +84,9 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [clients]: https://en.wikipedia.org/wiki/MUD_client
 
 [badge-source]: http://img.shields.io/badge/source-KrugerHeavyIndustries/btmux--docker-blue.svg?style=flat-square
-[badge-release]: https://img.shields.io/github/release/KrugerHeavyIndustries/btmux-docker.svg?style=flat-square
+[badge-release]: https://img.shields.io/github/v/tag/KrugerHeavyIndustries/btmux-docker.svg?sort=semver&style=flat-square
 [badge-license]: https://img.shields.io/github/license/KrugerHeavyIndustries/btmux-docker.svg?style=flat-square
-[badge-build]: https://img.shields.io/docker/build/montdidier/btmux.svg?style=flat-square
+[badge-build]: https://img.shields.io/docker/v/montdidier/btmux.svg?sort=semver&style=flat-square
 [badge-downloads]: https://img.shields.io/docker/pulls/montdidier/btmux.svg?style=flat-square&colorB=mediumvioletred
 
 [source]: https://github.com/KrugerHeavyIndustries/btmux-docker
