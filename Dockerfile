@@ -1,25 +1,30 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 RUN apt-get update -y
-RUN apt-get install -y build-essential libevent-dev
-RUN apt-get install -y git subversion
+RUN apt-get install -y build-essential libevent-dev curl
 RUN apt-get upgrade -y
 
 RUN set -ex && adduser --disabled-password --gecos '' mux
 
-ENV wrk /tmp
+ENV WRK /tmp
 
-WORKDIR ${wrk}
+WORKDIR ${WRK}
 
-RUN su -c 'git clone https://github.com/KrugerHeavyIndustries/btmux.git' mux
+ARG VERTAG="0.7.2"
 
-WORKDIR ${wrk}/btmux
+RUN su -c 'curl -L https://github.com/KrugerHeavyIndustries/btmux/archive/${VERTAG}.tar.gz | tar xz' mux
+
+WORKDIR ${WRK}/btmux-${VERTAG}
 
 RUN ./configure
 RUN make install
 
-RUN cp -a game.run/lib/* /usr/local/lib
-RUN cp -a game.run/bin/* /usr/local/bin
+RUN sed -i -E 's/BIN\=\.\/bin$/BIN\=\/usr\/local\/bin/g' ${WRK}/btmux-${VERTAG}/game.run/mux.config
+RUN sed -i -E 's/TEXT\=\.\/text$/TEXT\=\/var\/mux\/game\/text/g' ${WRK}/btmux-${VERTAG}/game.run/mux.config
+RUN sed -i -E 's/DATA\=\.\/data$/DATA\=\/var\/mux\/game\/data/g' ${WRK}/btmux-${VERTAG}/game.run/mux.config
+
+RUN mv game.run/lib/* /usr/local/lib
+RUN mv game.run/bin/* /usr/local/bin
 
 RUN chgrp mux /usr/local/bin/*
 RUN chown -R mux:mux game.run
@@ -27,11 +32,10 @@ RUN chown -R mux:mux game.run
 RUN mkdir -p /var/mux
 RUN chown mux.mux /var/mux
 
-RUN su -c 'mv game.run /var/mux/game.factory_default' mux
-
-RUN sed -i -E 's/BIN\=\.\/bin$/BIN\=\/usr\/local\/bin/g' /var/mux/game.factory_default/mux.config
-RUN sed -i -E 's/TEXT\=\.\/text$/TEXT\=\/var\/mux\/game\/text/g' /var/mux/game.factory_default/mux.config
-RUN sed -i -E 's/DATA\=\.\/data$/DATA\=\/var\/mux\/game\/data/g' /var/mux/game.factory_default/mux.config
+RUN mkdir -p /usr/local/share/btmux
+RUN chgrp mux /usr/local/share/btmux
+RUN mv game.run /usr/local/share/btmux/game.factory_issue
+RUN chgrp -R mux /usr/local/share/btmux/game.factory_issue
 
 COPY entrypoint.sh /usr/local/bin
 
