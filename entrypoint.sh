@@ -10,7 +10,7 @@ if [ -z "$1" ]; then
    fi
 
    if [ ! -f "/var/mux/game/mux.config" ]; then
-      su -c "cp -a /usr/local/share/btmux/game.factory_issue/{alias.conf,mux.config,netmux.conf,data,text,mechs,maps} /var/mux/game/" mux
+      su -s /bin/bash -c "cp -a /usr/local/share/btmux/game.factory_issue/{alias.conf,mux.config,netmux.conf,data,text,mechs,maps} /var/mux/game/" mux
    fi
 
    source /var/mux/game/mux.config
@@ -35,7 +35,7 @@ if [ -z "$1" ]; then
       cp ${DATA}/${SAVE_DB} ${DATA}/${INPUT_DB}
    fi
 
-   su -c "${BIN}/netmux ${GAMENAME}.conf >${LOGNAME} 2>&1" mux
+   exec "${BIN}/netmux" "${GAMENAME}.conf >${LOGNAME} 2>&1" mux
 else
    exec "$1"
 fi
