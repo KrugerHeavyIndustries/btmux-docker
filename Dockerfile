@@ -1,7 +1,7 @@
-ARG VERTAG="0.7.5"
+ARG VERTAG="0.7.6"
 ARG WRK="/tmp"
 
-FROM alpine:3.17.0 as build
+FROM alpine:3.19.1 as build
 
 ARG VERTAG
 ARG WRK
@@ -23,7 +23,7 @@ RUN sed -i -E 's/BIN\=\.\/bin$/BIN\=\/usr\/local\/bin/g' ${WRK}/btmux-${VERTAG}/
 RUN sed -i -E 's/TEXT\=\.\/text$/TEXT\=\/var\/mux\/game\/text/g' ${WRK}/btmux-${VERTAG}/game.run/mux.config
 RUN sed -i -E 's/DATA\=\.\/data$/DATA\=\/var\/mux\/game\/data/g' ${WRK}/btmux-${VERTAG}/game.run/mux.config
 
-FROM alpine:3.17.0 as runtime
+FROM alpine:3.19.1 as runtime
 
 RUN apk update && apk add libstdc++ libevent bash
 
